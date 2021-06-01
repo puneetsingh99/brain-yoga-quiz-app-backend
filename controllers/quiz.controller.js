@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const { Quiz } = require("../models/quiz.model");
 
 const addQuiz = async (req, res) => {
@@ -20,4 +19,21 @@ const addQuiz = async (req, res) => {
   }
 };
 
-module.exports = { addQuiz };
+const getAllQuizzes = async (req, res) => {
+  try {
+    const quizzes = await Quiz.find({}).select("-__v");
+    return res.status(200).json({
+      success: true,
+      message: "Quizzes retrieved successfully",
+      quizzes,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Could not retrieve quizzes",
+      errorMessage: error.message,
+    });
+  }
+};
+
+module.exports = { addQuiz, getAllQuizzes };
