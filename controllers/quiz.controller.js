@@ -1,5 +1,6 @@
 const { Quiz } = require("../models/quiz.model");
 const { successResponse, errorResponse } = require("../utils");
+const { extend } = require("lodash");
 
 const addQuiz = async (req, res) => {
   try {
@@ -38,4 +39,55 @@ const deleteAllQuizzes = async (req, res) => {
   }
 };
 
-module.exports = { addQuiz, getAllQuizzes, deleteAllQuizzes };
+const quizIdCheck = async (req, res, next, id) => {
+  try {
+    const quiz = await Quiz.findOne({ _id: id }).select("-__v");
+    if (!quiz) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Quiz not found" });
+    }
+    req.id = id;
+    req.quiz = quiz;
+    next();
+  } catch (error) {
+    return errorResponse(res, "Could not retrieve quiz", error);
+  }
+};
+
+const getQuiz = (req, res) => {
+  const { quiz } = req;
+  return successResponse(res, { message: "Quiz retrieved successfully", quiz });
+};
+
+const updateQuiz = async (req, res) => {
+  try {
+    const updateData = req.body;
+    let quizToBeUpdated = await Quiz.findOne({ _id: req.id });
+    quizToBeUpdated = extend(quizToBeUpdated, updateData);
+    const updatedQuiz = await quizToBeUpdated.save();
+    updatedQuiz.__v = undefined;
+    successResponse(res, { message: "Quiz updated successfully", updatedQuiz });
+  } catch (error) {
+    return errorResponse(res, "Could not update the quiz", error);
+  }
+};
+
+const deleteQuiz = async (req, res) => {
+  try {
+    await Quiz.deleteOne({ _id: req.id });
+    successResponse(res, { message: "Quiz deleted successfully" });
+  } catch (error) {
+    return errorResponse(res, "Could not delete the quiz", error);
+  }
+};
+
+module.exports = {
+  addQuiz,
+  getAllQuizzes,
+  deleteAllQuizzes,
+  quizIdCheck,
+  getQuiz,
+  updateQuiz,
+  deleteQuiz,
+};

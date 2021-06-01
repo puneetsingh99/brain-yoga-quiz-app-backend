@@ -52,7 +52,7 @@ const userIdCheck = async (req, res, next, id) => {
     req.user = user;
     next();
   } catch (error) {
-    return errorResponse(res, "User not found", error);
+    return errorResponse(res, "Could not retrieve user", error);
   }
 };
 

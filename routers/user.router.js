@@ -12,6 +12,7 @@ const {
 const userRouter = express.Router();
 
 userRouter.route("/").get(getAllUsers).post(addUser).delete(deleteAllUser);
+//TODO: remove delete route from the final version
 
 userRouter.param("userId", userIdCheck);
 
