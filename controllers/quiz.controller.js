@@ -1,4 +1,5 @@
 const { Quiz } = require("../models/quiz.model");
+const { successResponse, errorResponse } = require("../utils");
 
 const addQuiz = async (req, res) => {
   try {
@@ -6,52 +7,34 @@ const addQuiz = async (req, res) => {
     const newQuiz = new Quiz(quiz);
     const addedQuiz = await newQuiz.save();
     addedQuiz.__v = undefined;
-
-    return res
-      .status(201)
-      .json({ success: true, message: "quiz successfully added", addedQuiz });
+    return successResponse(
+      res,
+      { message: "Quiz added successfully", addedQuiz },
+      201
+    );
   } catch (error) {
-    return res.json({
-      success: false,
-      message: "Could not add the quiz",
-      errorMessage: error.message,
-    });
+    return errorResponse(res, "Could not add the quiz", error);
   }
 };
 
 const getAllQuizzes = async (req, res) => {
   try {
     const quizzes = await Quiz.find({}).select("-__v");
-    return res.status(200).json({
-      success: true,
+    return successResponse(res, {
       message: "Quizzes retrieved successfully",
       quizzes,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Could not retrieve quizzes",
-      errorMessage: error.message,
-    });
+    return errorResponse(res, "Could not retrieve quizzes", error);
   }
 };
 
 const deleteAllQuizzes = async (req, res) => {
   try {
-    const deletedQuizzes = await Quiz.deleteMany({});
-    return res.status(200).json({
-      success: true,
-      message: "Deleted all the quizzes",
-      deletedQuizzes,
-    });
+    await Quiz.deleteMany({});
+    return successResponse(res, { message: "Quizzes deleted successfully" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Could not delete quizzes",
-        errorMessage: error.message,
-      });
+    return errorResponse(res, "Could not delete quizzes", error);
   }
 };
 
