@@ -36,4 +36,23 @@ const getAllQuizzes = async (req, res) => {
   }
 };
 
-module.exports = { addQuiz, getAllQuizzes };
+const deleteAllQuizzes = async (req, res) => {
+  try {
+    const deletedQuizzes = await Quiz.deleteMany({});
+    return res.status(200).json({
+      success: true,
+      message: "Deleted all the quizzes",
+      deletedQuizzes,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({
+        success: false,
+        message: "Could not delete quizzes",
+        errorMessage: error.message,
+      });
+  }
+};
+
+module.exports = { addQuiz, getAllQuizzes, deleteAllQuizzes };
