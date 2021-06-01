@@ -1,3 +1,14 @@
+const successResponse = (res, { message, ...params }, status = 200) => {
+  console.log("inside successResponse utility");
+  const response = {
+    success: true,
+    message,
+    ...params,
+  };
+
+  return res.status(status).json(response);
+};
+
 const errorResponse = (res, message, error) => {
   console.log("inside errorResponse utility");
   const response = {
@@ -9,4 +20,4 @@ const errorResponse = (res, message, error) => {
   return res.status(500).json(response);
 };
 
-module.exports = { errorResponse };
+module.exports = { errorResponse, successResponse };
