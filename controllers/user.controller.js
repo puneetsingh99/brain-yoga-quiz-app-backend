@@ -43,7 +43,7 @@ const deleteAllUser = async (req, res) => {
 const userIdCheck = async (req, res, next, userId) => {
   try {
     const user = await User.findOne({ _id: userId })
-      .populate("quizzesTaken.quizId")
+      .populate("quizzesTaken.quiz")
       .select("-__v");
     if (!user) {
       return res

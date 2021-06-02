@@ -3,21 +3,6 @@ const { successResponse, errorResponse } = require("../utils");
 const { User } = require("../models/user.model");
 const { extend } = require("lodash");
 
-// getUserCreatedQuizzes
-// addUserCreatedQuiz;
-// deleteUserCreatedQuizzes;
-// userCreatedQuizIdCheck;
-
-// userCreatedQuiz;
-// deleteUserCreatedQuiz;
-
-// getQuizzesTakenByUser;
-// addQuizTakenByUser;
-// deleteQuizzesTakenByUser;
-
-// quizTakenByUser;
-// deleteQuizTakenByUser;
-
 //quizzes created by user
 const getUserCreatedQuizzes = (req, res) => {
   const userCreatedQuizzes = req.user.userCreatedQuizzes;
@@ -31,8 +16,8 @@ const addUserCreatedQuiz = async (req, res) => {
   try {
     const { userId } = req;
     const { userCreatedQuiz } = req.body;
-    userCreatedQuiz.createdBy = userId;
 
+    userCreatedQuiz.createdBy = userId;
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
       { $push: { userCreatedQuizzes: userCreatedQuiz } },
@@ -72,13 +57,11 @@ const userCreatedQuizIdCheck = async (req, res, next, quizId) => {
     const userCreatedQuiz = user.userCreatedQuizzes.find(
       (userCreatedQuiz) => String(userCreatedQuiz._id) === quizId
     );
-    console.log(userCreatedQuiz);
     if (!userCreatedQuiz) {
       return res
         .status(404)
         .json({ success: false, message: "User created quiz not found" });
     }
-    console.log("inside user created quiz id check");
     req.userCreatedQuiz = userCreatedQuiz;
     req.quizId = quizId;
     next();
@@ -113,7 +96,6 @@ const deleteUserCreatedQuiz = async (req, res) => {
 };
 
 //quizzes taken by user
-
 const getQuizzesTakenByUser = async (req, res) => {
   const { user } = req;
   const quizzesTaken = user.quizzesTaken;
@@ -127,18 +109,16 @@ const addOrUpdateQuizTakenByUser = async (req, res) => {
   try {
     const { userId, user } = req;
     const quizTakenByUser = req.body;
-    console.log(user.quizzesTaken);
     const quizAlreadyExists = user.quizzesTaken.find(
-      (quiz) => String(quiz.quizId._id) === quizTakenByUser.quizId
+      (quizTaken) => String(quizTaken.quiz._id) === quizTakenByUser.quiz
     );
 
     if (quizAlreadyExists) {
       let userToBeUpdated = await User.findOne({ _id: userId });
-
-      userToBeUpdated.quizzesTaken.forEach((quiz) => {
-        if (String(quiz.quizId._id) === quizTakenByUser.quizId) {
-          quiz.score = quizTakenByUser.score;
-          quiz.timeTaken = quizTakenByUser.timeTaken;
+      userToBeUpdated.quizzesTaken.forEach((quizTaken) => {
+        if (String(quizTaken.quiz._id) === quizTakenByUser.quiz) {
+          quizTaken.score = quizTakenByUser.score;
+          quizTaken.timeTaken = quizTakenByUser.timeTaken;
         }
       });
 
@@ -189,11 +169,10 @@ const deleteQuizzesTakenByUser = async (req, res) => {
 
 const getQuizTakenByUser = async (req, res) => {
   const { user, quizId } = req;
-  console.log(user);
   const quiz = user.quizzesTaken.find(
-    (quiz) => String(quiz.quizId._id) === quizId
+    (quizTaken) => String(quizTaken.quiz._id) === quizId
   );
-  console.log(quiz);
+
   return successResponse(res, {
     message: "Quiz taken by user retrieved successfully",
     quiz,
