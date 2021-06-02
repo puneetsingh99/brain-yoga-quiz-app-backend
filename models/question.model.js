@@ -4,6 +4,7 @@ const { OptionSchema } = require("./option.model");
 const QuestionSchema = mongoose.Schema({
   question: {
     type: String,
+    trim: true,
     required: [true, "question field cannot be empty"],
   },
   options: [OptionSchema],

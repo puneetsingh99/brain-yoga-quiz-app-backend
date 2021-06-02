@@ -19,3 +19,5 @@ app.use("/user", userRouter);
 app.use("/", (req, res) => res.send("Brain Yoga quiz app APIs"));
 
 app.listen(PORT, () => console.log(`The server is running at port ${PORT}`));
+
+//TODO: add route not found and error handler middleware

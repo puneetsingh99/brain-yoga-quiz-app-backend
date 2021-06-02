@@ -39,15 +39,15 @@ const deleteAllQuizzes = async (req, res) => {
   }
 };
 
-const quizIdCheck = async (req, res, next, id) => {
+const quizIdCheck = async (req, res, next, quizId) => {
   try {
-    const quiz = await Quiz.findOne({ _id: id }).select("-__v");
+    const quiz = await Quiz.findOne({ _id: quizId }).select("-__v");
     if (!quiz) {
       return res
         .status(404)
         .json({ success: false, message: "Quiz not found" });
     }
-    req.id = id;
+    req.quizId = quizId;
     req.quiz = quiz;
     next();
   } catch (error) {
@@ -63,7 +63,7 @@ const getQuiz = (req, res) => {
 const updateQuiz = async (req, res) => {
   try {
     const updateData = req.body;
-    let quizToBeUpdated = await Quiz.findOne({ _id: req.id });
+    let quizToBeUpdated = await Quiz.findOne({ _id: req.quizId });
     quizToBeUpdated = extend(quizToBeUpdated, updateData);
     const updatedQuiz = await quizToBeUpdated.save();
     updatedQuiz.__v = undefined;
@@ -75,7 +75,7 @@ const updateQuiz = async (req, res) => {
 
 const deleteQuiz = async (req, res) => {
   try {
-    await Quiz.deleteOne({ _id: req.id });
+    await Quiz.deleteOne({ _id: req.quizId });
     successResponse(res, { message: "Quiz deleted successfully" });
   } catch (error) {
     return errorResponse(res, "Could not delete the quiz", error);

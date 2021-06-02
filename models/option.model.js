@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const OptionSchema = mongoose.Schema({
   option: {
     type: String,
+    trim: true,
     required: [true, "option cannot be empty"],
   },
   isCorrect: {

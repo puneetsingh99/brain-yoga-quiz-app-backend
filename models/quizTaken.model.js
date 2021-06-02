@@ -11,7 +11,7 @@ const QuizTakenSchema = mongoose.Schema({
     required: [true, "quiz score cannot be empty"],
   },
 
-  timetaken: {
+  timeTaken: {
     type: Number,
     required: [true, "time taken to complete the quiz cannot be empty"],
   },

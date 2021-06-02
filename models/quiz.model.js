@@ -24,6 +24,7 @@ const QuizSchema = mongoose.Schema(
     questions: [QuestionSchema],
     createdBy: {
       type: String,
+      trim: true,
       required: true,
       default: "admin",
     },

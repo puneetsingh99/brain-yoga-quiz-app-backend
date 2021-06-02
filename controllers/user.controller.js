@@ -2,7 +2,7 @@ const { User } = require("../models/user.model");
 const { successResponse, errorResponse } = require("../utils");
 const { extend } = require("lodash");
 
-const getAllUsers = async (req, res) => {
+const getAllUser = async (req, res) => {
   try {
     const users = await User.find({}).select("-__v");
     return successResponse(res, {
@@ -40,15 +40,17 @@ const deleteAllUser = async (req, res) => {
   }
 };
 
-const userIdCheck = async (req, res, next, id) => {
+const userIdCheck = async (req, res, next, userId) => {
   try {
-    const user = await User.findOne({ _id: id }).select("-__v");
+    const user = await User.findOne({ _id: userId })
+      .populate("quizzesTaken.quizId")
+      .select("-__v");
     if (!user) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
-    req.id = id;
+    req.userId = userId;
     req.user = user;
     next();
   } catch (error) {
@@ -64,7 +66,12 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const updateData = req.body;
-    let userToBeUpdated = await User.findOne({ _id: req.id });
+
+    if (updateData.userCreatedQuiz) {
+      await User.findOneAndUpdate({ _id: req.userId });
+    }
+
+    let userToBeUpdated = await User.findOne({ _id: req.userId });
     userToBeUpdated = extend(userToBeUpdated, updateData);
     const updatedUser = await userToBeUpdated.save();
     updatedUser.__v = undefined;
@@ -80,7 +87,7 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    await User.deleteOne({ _id: req.id });
+    await User.deleteOne({ _id: req.userId });
     return successResponse(res, {
       message: "User deleted successfully",
     });
@@ -91,7 +98,7 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
   addUser,
-  getAllUsers,
+  getAllUser,
   deleteAllUser,
   userIdCheck,
   getUser,
