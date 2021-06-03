@@ -13,6 +13,7 @@ const UserSchema = mongoose.Schema(
       type: String,
       trim: true,
       required: [true, "username field of the user cannot be empty"],
+      index: true,
     },
     password: {
       type: String,
