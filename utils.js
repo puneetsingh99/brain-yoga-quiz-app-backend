@@ -1,3 +1,10 @@
+const jwt = require("jsonwebtoken");
+
+const generateToken = (payload, secret) => {
+  const token = jwt.sign(payload, secret, { expiresIn: "24h" });
+  return token;
+};
+
 const successResponse = (res, { message, ...params }, status = 200) => {
   console.log("inside successResponse utility");
   const response = {
@@ -20,4 +27,4 @@ const errorResponse = (res, message, error) => {
   return res.status(500).json(response);
 };
 
-module.exports = { errorResponse, successResponse };
+module.exports = { generateToken, errorResponse, successResponse };

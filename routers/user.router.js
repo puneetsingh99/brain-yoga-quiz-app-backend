@@ -1,7 +1,6 @@
 const express = require("express");
 const { quizIdCheck } = require("../controllers/quiz.controller");
 const {
-  addUser,
   getAllUser,
   deleteAllUser,
   userIdCheck,
@@ -9,6 +8,8 @@ const {
   updateUser,
   deleteUser,
 } = require("../controllers/user.controller");
+
+const { signup } = require("../controllers/auth.controller");
 
 const {
   getUserCreatedQuizzes,
@@ -22,13 +23,16 @@ const {
   deleteQuizzesTakenByUser,
   getQuizTakenByUser,
 } = require("../controllers/user.quiz.controller");
+const { verifyAuth } = require("../middlewares/verify-auth.middleware");
 
 const userRouter = express.Router();
 
 //TODO:Do not return sensitive info of the user in the final version
 
-userRouter.route("/").get(getAllUser).post(addUser).delete(deleteAllUser);
+userRouter.route("/").get(getAllUser).post(signup).delete(deleteAllUser);
 //TODO: remove delete route from the final version
+
+userRouter.use(verifyAuth);
 
 userRouter.param("userId", userIdCheck);
 

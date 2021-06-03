@@ -14,22 +14,22 @@ const getAllUser = async (req, res) => {
   }
 };
 
-const addUser = async (req, res) => {
-  try {
-    const user = req.body;
-    const newUser = new User(user);
-    const createdUser = await newUser.save();
-    createdUser.__v = undefined;
+// const addUser = async (req, res) => {
+//   try {
+//     const user = req.body;
+//     const newUser = new User(user);
+//     const createdUser = await newUser.save();
+//     createdUser.__v = undefined;
 
-    return successResponse(
-      res,
-      { message: "User added successfully", createdUser },
-      201
-    );
-  } catch (error) {
-    return errorResponse(res, "Could not add the user", error);
-  }
-};
+//     return successResponse(
+//       res,
+//       { message: "User added successfully", createdUser },
+//       201
+//     );
+//   } catch (error) {
+//     return errorResponse(res, "Could not add the user", error);
+//   }
+// };
 
 const deleteAllUser = async (req, res) => {
   try {
@@ -97,7 +97,6 @@ const deleteUser = async (req, res) => {
 };
 
 module.exports = {
-  addUser,
   getAllUser,
   deleteAllUser,
   userIdCheck,
