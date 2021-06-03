@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const { initializeDbConnection } = require("./db/db");
 const { quizRouter } = require("./routers/quiz.router");
 const { userRouter } = require("./routers/user.router");
+const { routeNotFound } = require("./middlewares/route-not-found.middleware");
+const { errorHandler } = require("./middlewares/error-handler.middleware");
 
 const app = express();
 const PORT = 5000;
@@ -16,7 +18,9 @@ initializeDbConnection();
 app.use("/quiz", quizRouter);
 app.use("/user", userRouter);
 
-app.use("/", (req, res) => res.send("Brain Yoga quiz app APIs"));
+// NOTE: Do not move
+app.use(routeNotFound);
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`The server is running at port ${PORT}`));
 

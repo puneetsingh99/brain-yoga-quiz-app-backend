@@ -55,7 +55,7 @@ userRouter
   .get(getQuizzesTakenByUser)
   .post(addOrUpdateQuizTakenByUser)
   .delete(deleteQuizzesTakenByUser);
-//TODO:remove delte route before final deployment
+//TODO:remove delete route before final deployment
 
 userRouter.param("quizId", quizIdCheck);
 
