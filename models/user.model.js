@@ -14,6 +14,7 @@ const UserSchema = mongoose.Schema(
       trim: true,
       required: [true, "username field of the user cannot be empty"],
       index: true,
+      unique: true,
     },
     password: {
       type: String,
