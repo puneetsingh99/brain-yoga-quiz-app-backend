@@ -1,7 +1,5 @@
-const express = require("express");
 const { successResponse, errorResponse } = require("../utils");
 const { User } = require("../models/user.model");
-const { extend } = require("lodash");
 
 //quizzes created by user
 const getUserCreatedQuizzes = (req, res) => {
@@ -105,10 +103,13 @@ const getQuizzesTakenByUser = async (req, res) => {
   });
 };
 
+//TODO: Implement a top scorers list
+
 const addOrUpdateQuizTakenByUser = async (req, res) => {
   try {
     const { userId, user } = req;
     const quizTakenByUser = req.body;
+
     const quizAlreadyExists = user.quizzesTaken.find(
       (quizTaken) => String(quizTaken.quiz._id) === quizTakenByUser.quiz
     );

@@ -6,7 +6,6 @@ const { quizRouter } = require("./routers/quiz.router");
 const { userRouter } = require("./routers/user.router");
 const { routeNotFound } = require("./middlewares/route-not-found.middleware");
 const { errorHandler } = require("./middlewares/error-handler.middleware");
-const { verifyAuth } = require("./middlewares/verify-auth.middleware");
 const { login } = require("./controllers/auth.controller");
 const { loginHandler } = require("./middlewares/login.middleware");
 
@@ -27,5 +26,3 @@ app.use(routeNotFound);
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`The server is running at port ${PORT}`));
-
-//TODO: add route not found and error handler middleware

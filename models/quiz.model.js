@@ -1,22 +1,23 @@
 const mongoose = require("mongoose");
 const { QuestionSchema } = require("./question.model");
+const { TopScorerSchema } = require("./topscorer.model");
 
 const QuizSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "please provide a name for the quiz"],
+      required: [true, "Please provide a name for the quiz"],
     },
     image: {
       type: String,
     },
     timelimit: {
       type: Number,
-      required: [true, "please provide the duration of the quiz"],
+      required: [true, "Please provide the duration of the quiz"],
     },
     score: {
       type: Number,
-      required: [true, "please provide the score for correct answer"],
+      required: [true, "Please provide the score for correct answer"],
     },
     negativeScore: {
       type: Number,
@@ -28,6 +29,7 @@ const QuizSchema = mongoose.Schema(
       required: true,
       default: "admin",
     },
+    topScorers: [TopScorerSchema],
   },
   {
     timestamps: true,

@@ -5,7 +5,7 @@ const QuestionSchema = mongoose.Schema({
   question: {
     type: String,
     trim: true,
-    required: [true, "question field cannot be empty"],
+    required: [true, "Question field cannot be empty"],
   },
   options: [OptionSchema],
   image: {

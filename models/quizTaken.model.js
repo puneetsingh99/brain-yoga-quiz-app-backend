@@ -20,3 +20,5 @@ const QuizTakenSchema = mongoose.Schema({
 const QuizTaken = mongoose.model("QuizTaken", QuizTakenSchema);
 
 module.exports = { QuizTakenSchema, QuizTaken };
+
+//TODO: Remove model if no use
