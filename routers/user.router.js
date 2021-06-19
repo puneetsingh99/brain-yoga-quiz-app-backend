@@ -22,7 +22,7 @@ const {
   addOrUpdateQuizTakenByUser,
   deleteQuizzesTakenByUser,
   getQuizTakenByUser,
-} = require("../controllers/user.quiz.controller");
+} = require("../controllers/userQuiz.controller");
 const { verifyAuth } = require("../middlewares/verify-auth.middleware");
 
 const userRouter = express.Router();

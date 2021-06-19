@@ -33,5 +33,3 @@ const loginHandler = async (req, res, next) => {
 };
 
 module.exports = { loginHandler };
-
-//TODO: set username as an index;

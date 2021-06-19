@@ -1,5 +1,11 @@
-const { successResponse, errorResponse } = require("../utils");
+const {
+  successResponse,
+  errorResponse,
+  updateTopScorers,
+  doUpdateStats,
+} = require("../utils");
 const { User } = require("../models/user.model");
+const { Quiz } = require("../models/quiz.model");
 
 //quizzes created by user
 const getUserCreatedQuizzes = (req, res) => {
@@ -110,6 +116,19 @@ const addOrUpdateQuizTakenByUser = async (req, res) => {
     const { userId, user } = req;
     const quizTakenByUser = req.body;
 
+    //update top scorers list
+    const quizToBeUpdated = await Quiz.findOne({ _id: quizTakenByUser.quiz });
+
+    const updateTopScorersArgs = {
+      existingTopScorers: quizToBeUpdated.topScorers,
+      challengerId: userId,
+      challenger: quizTakenByUser,
+    };
+
+    quizToBeUpdated.topScorers = updateTopScorers(updateTopScorersArgs);
+    quizToBeUpdated.save();
+
+    //update stats of user if user has already taken the quiz before
     const quizAlreadyExists = user.quizzesTaken.find(
       (quizTaken) => String(quizTaken.quiz._id) === quizTakenByUser.quiz
     );
@@ -118,8 +137,11 @@ const addOrUpdateQuizTakenByUser = async (req, res) => {
       let userToBeUpdated = await User.findOne({ _id: userId });
       userToBeUpdated.quizzesTaken.forEach((quizTaken) => {
         if (String(quizTaken.quiz._id) === quizTakenByUser.quiz) {
-          quizTaken.score = quizTakenByUser.score;
-          quizTaken.timeTaken = quizTakenByUser.timeTaken;
+          const updateRecord = doUpdateStats(quizTaken, quizTakenByUser);
+          if (updateRecord) {
+            quizTaken.score = quizTakenByUser.score;
+            quizTaken.timeTaken = quizTakenByUser.timeTaken;
+          }
         }
       });
 
