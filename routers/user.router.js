@@ -38,8 +38,6 @@ userRouter.param("userId", userIdCheck);
 
 userRouter.route("/:userId").get(getUser).post(updateUser).delete(deleteUser);
 
-// TODO: Use a middleware to check if a document already exists before adding a document
-
 userRouter
   .route("/:userId/my-quiz")
   .get(getUserCreatedQuizzes)

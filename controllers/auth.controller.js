@@ -17,6 +17,12 @@ const signup = async (req, res) => {
   try {
     const user = req.body;
 
+    const userAlreadyExists = await User.findOne({ username: user.username });
+
+    if (userAlreadyExists) {
+      return res.json({ success: false, message: "User already exists" });
+    }
+
     const newUser = new User(user);
 
     const salt = await bcrypt.genSalt(10);

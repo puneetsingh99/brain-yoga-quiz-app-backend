@@ -14,23 +14,6 @@ const getAllUser = async (req, res) => {
   }
 };
 
-// const addUser = async (req, res) => {
-//   try {
-//     const user = req.body;
-//     const newUser = new User(user);
-//     const createdUser = await newUser.save();
-//     createdUser.__v = undefined;
-
-//     return successResponse(
-//       res,
-//       { message: "User added successfully", createdUser },
-//       201
-//     );
-//   } catch (error) {
-//     return errorResponse(res, "Could not add the user", error);
-//   }
-// };
-
 const deleteAllUser = async (req, res) => {
   try {
     await User.deleteMany({});
@@ -44,7 +27,7 @@ const userIdCheck = async (req, res, next, userId) => {
   try {
     const user = await User.findOne({ _id: userId })
       .populate("quizzesTaken.quiz")
-      .select("-__v");
+      .select("-__v -password");
     if (!user) {
       return res
         .status(404)
