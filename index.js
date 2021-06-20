@@ -10,6 +10,7 @@ const { login } = require("./controllers/auth.controller");
 const { loginHandler } = require("./middlewares/login.middleware");
 
 const app = express();
+const PORT = 5000;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -24,6 +25,6 @@ app.use("/login", loginHandler, login);
 app.use(routeNotFound);
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () =>
-  console.log(`The server is running at port ${process.env.PORT}`)
+app.listen(process.env.PORT || PORT, () =>
+  console.log(`The server is running at port ${process.env.PORT || PORT}`)
 );
