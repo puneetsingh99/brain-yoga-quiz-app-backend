@@ -29,7 +29,8 @@ const userRouter = express.Router();
 
 //TODO:Do not return sensitive info of the user in the final version
 
-userRouter.route("/").get(getAllUser).post(signup).delete(deleteAllUser);
+userRouter.route("/").get(getAllUser).post(signup);
+// .delete(deleteAllUser);
 //TODO: remove delete route from the final version
 
 userRouter.use(verifyAuth);

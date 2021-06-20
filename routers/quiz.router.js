@@ -10,7 +10,8 @@ const {
   deleteQuiz,
 } = require("../controllers/quiz.controller");
 
-quizRouter.route("/").get(getAllQuizzes).post(addQuiz).delete(deleteAllQuizzes);
+quizRouter.route("/").get(getAllQuizzes).post(addQuiz);
+// .delete(deleteAllQuizzes);
 //TODO: remove delete route from the final version
 
 quizRouter.param("quizId", quizIdCheck);
