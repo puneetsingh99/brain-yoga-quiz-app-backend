@@ -4,7 +4,10 @@ const { extend } = require("lodash");
 
 const getAllUser = async (req, res) => {
   try {
-    const users = await User.find({}).select("-__v");
+    const users = await User.find({}).select(
+      "-__v -password -createdAt -updatedAt"
+    );
+
     return successResponse(res, {
       message: "Users retrieved successfully",
       users,
@@ -27,7 +30,7 @@ const userIdCheck = async (req, res, next, userId) => {
   try {
     const user = await User.findOne({ _id: userId })
       .populate("quizzesTaken.quiz")
-      .select("-__v -password");
+      .select("-__v -password -createdAt -updatedAt");
     if (!user) {
       return res
         .status(404)

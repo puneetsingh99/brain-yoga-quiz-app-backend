@@ -27,24 +27,21 @@ const { verifyAuth } = require("../middlewares/verify-auth.middleware");
 
 const userRouter = express.Router();
 
-//TODO:Do not return sensitive info of the user in the final version
-
 userRouter.route("/").get(getAllUser).post(signup);
 // .delete(deleteAllUser);
-//TODO: remove delete route from the final version
 
 userRouter.use(verifyAuth);
 
 userRouter.param("userId", userIdCheck);
 
-userRouter.route("/:userId").get(getUser).post(updateUser).delete(deleteUser);
+userRouter.route("/:userId").get(getUser).post(updateUser);
+// .delete(deleteUser);
 
 userRouter
   .route("/:userId/my-quiz")
   .get(getUserCreatedQuizzes)
   .post(addUserCreatedQuiz)
   .delete(deleteUserCreatedQuizzes);
-//TODO:remove delete route before final deployment
 
 userRouter.param("userCreatedQuizId", userCreatedQuizIdCheck);
 
