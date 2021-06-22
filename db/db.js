@@ -10,9 +10,6 @@ const initializeDbConnection = async () => {
       useCreateIndex: true,
     });
     console.log("Db connection successfull");
-    mongoose.connection.db.listCollections().toArray((error, collections) => {
-      console.log(collections);
-    });
   } catch (error) {
     console.log(error);
     console.log("Could not connect to Db");
