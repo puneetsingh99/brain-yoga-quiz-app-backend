@@ -20,7 +20,7 @@ const addQuiz = async (req, res) => {
 
 const getAllQuizzes = async (req, res) => {
   try {
-    const quizzes = await Quiz.find({}).select("-__v");
+    const quizzes = await Quiz.find({}).select("-__v -createdAt -updatedAt");
     return successResponse(res, {
       message: "Quizzes retrieved successfully",
       quizzes,
@@ -41,7 +41,9 @@ const deleteAllQuizzes = async (req, res) => {
 
 const quizIdCheck = async (req, res, next, quizId) => {
   try {
-    const quiz = await Quiz.findOne({ _id: quizId }).select("-__v");
+    const quiz = await Quiz.findOne({ _id: quizId }).select(
+      "-__v -createdAt -updatedAt"
+    );
     if (!quiz) {
       return res
         .status(404)
