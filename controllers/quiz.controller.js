@@ -41,9 +41,9 @@ const deleteAllQuizzes = async (req, res) => {
 
 const quizIdCheck = async (req, res, next, quizId) => {
   try {
-    const quiz = await Quiz.findOne({ _id: quizId }).select(
-      "-__v -createdAt -updatedAt"
-    );
+    const quiz = await Quiz.findOne({ _id: quizId })
+      .select("-__v -createdAt -updatedAt")
+      .populate("topScorers.user", "username");
     if (!quiz) {
       return res
         .status(404)

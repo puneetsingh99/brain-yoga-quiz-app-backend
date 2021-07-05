@@ -12,7 +12,6 @@ const OptionSchema = mongoose.Schema({
   },
 });
 
-//remove Option model later if there is no use for it.
 const Option = mongoose.model("Option", OptionSchema);
 
 module.exports = { OptionSchema, Option };
