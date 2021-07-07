@@ -7,7 +7,16 @@ const SECRET = process.env.SECRET;
 const login = (req, res) => {
   if (req.login === "successful") {
     const token = generateToken({ userId: req.userId }, SECRET);
-    return successResponse(res, { message: "Login successful", token });
+    const user = {
+      userId: req.userId,
+      username: req.username,
+      token,
+      quizzesTaken: req.quizzesTaken,
+    };
+    return successResponse(res, {
+      message: "Login successful",
+      user,
+    });
   } else {
     return res.status(500).json({ success: false, message: "Could not login" });
   }
@@ -23,17 +32,28 @@ const signup = async (req, res) => {
       return res.json({ success: false, message: "User already exists" });
     }
 
+    user.quizzesTaken = [];
+    user.userCreatedQuizzes = [];
+
     const newUser = new User(user);
 
     const salt = await bcrypt.genSalt(10);
     newUser.password = await bcrypt.hash(newUser.password, salt);
 
     const createdUser = await newUser.save();
-    createdUser.__v = undefined;
+
+    const token = generateToken({ userId: createdUser._id }, SECRET);
+    const userId = createdUser._id;
+    const name = createdUser.name;
+    const username = createdUser.username;
+    const quizzesTaken = createdUser.quizzesTaken;
 
     return successResponse(
       res,
-      { message: "User added successfully", createdUser },
+      {
+        message: "User added successfully",
+        user: { userId, name, username, token, quizzesTaken },
+      },
       201
     );
   } catch (error) {

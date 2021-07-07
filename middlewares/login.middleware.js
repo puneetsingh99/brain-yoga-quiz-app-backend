@@ -22,6 +22,8 @@ const loginHandler = async (req, res, next) => {
     }
     req.login = "successful";
     req.userId = user._id;
+    req.username = user.username;
+    req.quizzesTaken = user.quizzesTaken;
     return next();
   } catch (error) {
     return res.status(401).json({

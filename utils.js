@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("./models/user.model");
 
 const generateToken = (payload, secret) => {
   const token = jwt.sign(payload, secret, { expiresIn: "24h" });
