@@ -1,7 +1,7 @@
 const {
   successResponse,
   errorResponse,
-  updateTopScorers,
+  updateLeaderBoard,
   doUpdateStats,
 } = require("../utils");
 const { User } = require("../models/user.model");
@@ -109,8 +109,6 @@ const getQuizzesTakenByUser = async (req, res) => {
   });
 };
 
-//TODO: Implement a top scorers list
-
 const addOrUpdateQuizTakenByUser = async (req, res) => {
   try {
     const { userId, user } = req;
@@ -119,14 +117,19 @@ const addOrUpdateQuizTakenByUser = async (req, res) => {
     //update top scorers list
     const quizToBeUpdated = await Quiz.findOne({ _id: quizTakenByUser.quiz });
 
-    const updateTopScorersArgs = {
-      existingTopScorers: quizToBeUpdated.topScorers,
+    const updateLeaderBoardArgs = {
+      existingLeaderBoard: quizToBeUpdated.topScorers,
       challengerId: userId,
-      challenger: quizTakenByUser,
+      challengerStats: quizTakenByUser,
     };
 
-    quizToBeUpdated.topScorers = updateTopScorers(updateTopScorersArgs);
-    quizToBeUpdated.save();
+    // console.log("updateLeaderBoardArgs");
+    // console.log(updateLeaderBoardArgs);
+    const a = updateLeaderBoard(updateLeaderBoardArgs);
+    console.log("Updated maal");
+    console.log(a);
+    quizToBeUpdated.topScorers = a;
+    await quizToBeUpdated.save();
 
     //update stats of user if user has already taken the quiz before
     const quizAlreadyExists = user.quizzesTaken.find(

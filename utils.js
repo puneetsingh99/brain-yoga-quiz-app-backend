@@ -7,7 +7,6 @@ const generateToken = (payload, secret) => {
 };
 
 const successResponse = (res, { message, ...params }, status = 200) => {
-  console.log("inside successResponse utility");
   const response = {
     success: true,
     message,
@@ -17,7 +16,6 @@ const successResponse = (res, { message, ...params }, status = 200) => {
 };
 
 const errorResponse = (res, message, error) => {
-  console.log("inside errorResponse utility");
   const response = {
     success: false,
     message,
@@ -39,57 +37,74 @@ const doUpdateStats = (existingStat, newStat) => {
   return updateRank;
 };
 
-const updateTopScorers = ({ existingTopScorers, challengerId, challenger }) => {
-  const topScorersList = [...existingTopScorers];
-  const length = topScorersList.length;
+const removeDuplicateUsers = (leaderBoard) => {
+  const leaderBoardCopy = [...leaderBoard];
 
-  if (length === 0) {
-    topScorersList.push({
+  console.log("remove duplicate users from this");
+  console.log(leaderBoardCopy);
+
+  const uniqueUserIds = Array.from(
+    new Set(leaderBoardCopy.map((user) => String(user.user)))
+  );
+
+  console.log("unique user ids");
+  console.log(uniqueUserIds);
+
+  const uniqueUsers = uniqueUserIds.map((userId) =>
+    leaderBoardCopy.find((user) => String(user.user) === String(userId))
+  );
+  return uniqueUsers;
+};
+
+const sortOnScoreAndTimeTaken = (user1, user2) => {
+  if (user1.score > user2.score) {
+    return -1;
+  }
+  if (user1.score === user2.score && user1.timeTaken < user2.timeTaken) {
+    return -1;
+  }
+  return 0;
+};
+
+const updateLeaderBoard = ({
+  existingLeaderBoard,
+  challengerId,
+  challengerStats,
+}) => {
+  const newLeaderBoard = [
+    ...existingLeaderBoard,
+    {
       user: challengerId,
-      rank: 1,
-      score: challenger.score,
-      timeTaken: challenger.timeTaken,
-    });
-    return topScorersList;
+      score: challengerStats.score,
+      timeTaken: challengerStats.timeTaken,
+    },
+  ];
+
+  if (newLeaderBoard.length === 1) {
+    newLeaderBoard[0].rank = 1;
+    return newLeaderBoard;
   }
 
-  for (let i = 0; i < topScorersList.length; i++) {
-    const updateRank = doUpdateStats(topScorersList[i], challenger);
-    if (updateRank) {
-      challenger.rank = i + 1;
-      if (String(topScorersList[i].user) === challengerId) {
-        topScorersList[i].rank = challenger.rank;
-        topScorersList[i].score = challenger.score;
-        topScorersList[i].timeTaken = challenger.timeTaken;
-      } else {
-        topScorersList.splice(i, 0, {
-          user: challengerId,
-          rank: challenger.rank,
-          score: challenger.score,
-          timeTaken: challenger.timeTaken,
-        });
-      }
+  newLeaderBoard.sort(sortOnScoreAndTimeTaken);
 
-      for (let j = i + 1; j <= length; j++) {
-        if (topScorersList[j]) {
-          topScorersList[j].rank = topScorersList[j].rank + 1;
-        }
-      }
-      break;
-    }
-  }
+  const uniqueLeaderBoard = removeDuplicateUsers(newLeaderBoard);
 
-  if (length === 5) {
-    topScorersList.pop();
-  }
+  uniqueLeaderBoard.length > 5 && uniqueLeaderBoard.pop();
 
-  return topScorersList;
+  const leaderBoardWithRanks = uniqueLeaderBoard.map((user, index) => ({
+    user: user.user,
+    rank: index + 1,
+    score: user.score,
+    timeTaken: user.timeTaken,
+  }));
+
+  return leaderBoardWithRanks;
 };
 
 module.exports = {
   generateToken,
   errorResponse,
   successResponse,
-  updateTopScorers,
+  updateLeaderBoard,
   doUpdateStats,
 };
