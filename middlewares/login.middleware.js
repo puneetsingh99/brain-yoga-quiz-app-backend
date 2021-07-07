@@ -13,6 +13,14 @@ const loginHandler = async (req, res, next) => {
     }
 
     const user = await User.findOne({ username: username });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
     const validPassword = bcrypt.compare(password, user.password);
 
     if (!validPassword) {
@@ -28,7 +36,7 @@ const loginHandler = async (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: "User not found",
+      message: "Cannot login",
       errorMessage: error.message,
     });
   }
