@@ -123,12 +123,7 @@ const addOrUpdateQuizTakenByUser = async (req, res) => {
       challengerStats: quizTakenByUser,
     };
 
-    // console.log("updateLeaderBoardArgs");
-    // console.log(updateLeaderBoardArgs);
-    const a = updateLeaderBoard(updateLeaderBoardArgs);
-    console.log("Updated maal");
-    console.log(a);
-    quizToBeUpdated.topScorers = a;
+    quizToBeUpdated.topScorers = updateLeaderBoard(updateLeaderBoardArgs);
     await quizToBeUpdated.save();
 
     //update stats of user if user has already taken the quiz before
