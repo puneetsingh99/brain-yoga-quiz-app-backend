@@ -7,6 +7,7 @@ const SECRET = process.env.SECRET;
 const login = (req, res) => {
   if (req.login === "successful") {
     const token = generateToken({ userId: req.userId }, SECRET);
+
     const user = {
       userId: req.userId,
       username: req.username,
@@ -41,6 +42,7 @@ const signup = async (req, res) => {
     newUser.password = await bcrypt.hash(newUser.password, salt);
 
     const createdUser = await newUser.save();
+    await createdUser.populate("quizzesTaken").execPopulate();
 
     const token = generateToken({ userId: createdUser._id }, SECRET);
     const userId = createdUser._id;

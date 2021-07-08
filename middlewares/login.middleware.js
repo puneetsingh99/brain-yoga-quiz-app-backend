@@ -12,7 +12,10 @@ const loginHandler = async (req, res, next) => {
       });
     }
 
-    const user = await User.findOne({ username: username });
+    const user = await User.findOne({ username: username }).populate(
+      "quizzesTaken.quiz",
+      "name"
+    );
 
     if (!user) {
       return res.status(404).json({
