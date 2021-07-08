@@ -61,6 +61,7 @@ const updateUser = async (req, res) => {
     userToBeUpdated = extend(userToBeUpdated, updateData);
     const updatedUser = await userToBeUpdated.save();
     updatedUser.__v = undefined;
+    updatedUser.password = undefined;
 
     return successResponse(res, {
       message: "User updated successfully",
