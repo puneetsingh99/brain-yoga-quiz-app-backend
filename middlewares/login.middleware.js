@@ -30,7 +30,7 @@ const loginHandler = async (req, res, next) => {
     if (!validPassword) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid password" });
+        .json({ success: false, message: "Incorrect password" });
     }
     req.login = "successful";
     req.userId = user._id;
