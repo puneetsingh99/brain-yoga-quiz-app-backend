@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const loginHandler = async (req, res, next) => {
   try {
     const { username, password } = req.body;
+    console.log({ username, password });
 
     if (!(username && password)) {
       return res.json({
@@ -12,7 +13,7 @@ const loginHandler = async (req, res, next) => {
       });
     }
 
-    const user = await User.findOne({ username: username }).populate(
+    const user = await User.findOne({ username }).populate(
       "quizzesTaken.quiz",
       "name"
     );
@@ -24,7 +25,7 @@ const loginHandler = async (req, res, next) => {
       });
     }
 
-    const validPassword = bcrypt.compare(password, user.password);
+    const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
       return res
@@ -39,7 +40,7 @@ const loginHandler = async (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: "Cannot login",
+      message: "Something went wrong",
       errorMessage: error.message,
     });
   }
