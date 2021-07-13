@@ -28,9 +28,10 @@ const deleteAllUser = async (req, res) => {
 
 const userIdCheck = async (req, res, next, userId) => {
   try {
-    const user = await User.findOne({ _id: userId }).select(
-      "-password -userCreatedQuizzes -__v -createdAt -updatedAt"
-    );
+    const user = await User.findOne({ _id: userId })
+      .populate("quizzesTaken.quiz", "name")
+      .select("-password -userCreatedQuizzes -__v -createdAt -updatedAt");
+
     if (!user) {
       return res
         .status(404)
