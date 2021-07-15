@@ -88,7 +88,7 @@ const updateLeaderBoard = ({
 
   const uniqueLeaderBoard = removeDuplicateUsers(newLeaderBoard);
 
-  uniqueLeaderBoard.length > 10 && uniqueLeaderBoard.pop();
+  uniqueLeaderBoard.length > 7 && uniqueLeaderBoard.pop();
 
   const leaderBoardWithRanks = uniqueLeaderBoard.map((user, index) => ({
     user: user.user,
