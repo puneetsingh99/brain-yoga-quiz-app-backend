@@ -144,7 +144,12 @@ const addOrUpdateQuizTakenByUser = async (req, res) => {
       });
 
       const updatedUser = await userToBeUpdated.save();
+      updatedUser.password = undefined;
       updatedUser.__v = undefined;
+      updatedUser.createdAt = undefined;
+      updatedUser.updatedAt = undefined;
+      updatedUser.name = undefined;
+      updatedUser.userCreatedQuizzes = undefined;
 
       return successResponse(res, {
         message: "Quiz taken by user updated successfully",

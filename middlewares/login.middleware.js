@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const loginHandler = async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    console.log({ username, password });
 
     if (!(username && password)) {
       return res.json({
